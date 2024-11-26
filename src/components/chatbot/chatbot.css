@@ -1,0 +1,12 @@
+.imagecontainer {
+  height: 50px;
+  width: auto;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  padding: 10px;
+  background-color: #ffd700;
+}

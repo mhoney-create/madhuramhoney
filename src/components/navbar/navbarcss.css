@@ -1,0 +1,14 @@
+.maincontainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.subcontainer {
+  display: flex;
+  font-size: larger;
+  gap: 20px;
+}
+.imagecontainer {
+  height: 100px;
+  width: 200px;
+}
