@@ -27,37 +27,54 @@ export function PaymentComponent() {
     }
     console.log("script loaded");
     const result = await axios.post(
-      "http://localhost:3500/api/createpaymentorder"
+      "http://localhost:3500/api/createpaymentorder",
+      {
+        items: [
+          {
+            productId: "6746a8696e8b2f678917c79b",
+            productName: "moringahoney",
+            quantity: 2,
+            price: 299, // Price for 100g variant
+            size: "100g",
+          },
+        ],
+        totalAmount: 598, // (299 * 2) + (699 * 1)
+        userId: "673c429801fdf6f32a2389fb", // Replace with actual user ID from your system
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
-
     if (!result) {
       alert("Server error. Are you online?");
       return;
     }
 
-    const { amount, id: order_id, currency } = result.data;
-
+    const { order } = result.data;
+    console.log(order);
     const options = {
       key: "rzp_test_XUyV1Om2oZEBvT", // Enter the Key ID generated from the Dashboard
-      amount: amount.toString(),
-      currency: currency,
-      name: "Soumya Corp.",
+      amount: order.amount.toString(),
+      currency: order.currency,
+      name: "Madhurum Honey",
       description: "Test Transaction",
       // image: { logo },
-      order_id: order_id,
+      order_id: order.id,
       handler: async function (response) {
         const data = {
-          orderCreationId: order_id,
+          orderCreationId: order.id,
           razorpayPaymentId: response.razorpay_payment_id,
           razorpayOrderId: response.razorpay_order_id,
           razorpaySignature: response.razorpay_signature,
         };
-
+        console.log("calling success api");
         const result = await axios.post(
           "http://localhost:3500/api/success",
           data
         );
-
+        console.log("called success api");
         alert(result.data.msg);
       },
       prefill: {
